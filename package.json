@@ -1,0 +1,65 @@
+{
+  "name": "vikadata",
+  "version": "1.0.66",
+  "main": "dist/main.js",
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^11.0.3",
+    "electron-builder": "^22.9.1",
+    "webpack": "^5.11.1"
+  },
+  "dependencies": {
+    "electron-updater": "^4.3.5",
+    "webpack-cli": "^4.3.1",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "scripts": {
+    "start": "electron dist/main.js",
+    "build": "webpack",
+    "dist:prod_mac": "cross-env BUILD_ENV=production yarn run build && electron-builder build --mac",
+    "dist:dev_mac": "cross-env BUILD_ENV=development yarn run build &&  electron-builder build --mac",
+    "dist:prod_win": "cross-env BUILD_ENV=production yarn run build && electron-builder build --win",
+    "dist:dev_win": "cross-env BUILD_ENV=development yarn run build && electron-builder build --win",
+    "dist:prod_m1": "cross-env BUILD_ENV=production yarn run build && electron-builder build --mac --arm64",
+    "dist:dev_m1": "cross-env BUILD_ENV=development yarn run build && electron-builder build --mac --arm64"
+  },
+  "build": {
+    "productName": "vikadata",
+    "appId": "com.vikadata.www",
+    "copyright": "",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "files": [
+      "node_modules/",
+      "dist/",
+      "package.json",
+      "public/"
+    ],
+    "directories": {
+      "output": "build"
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://192.168.50.117:8080/"
+      }
+    ],
+    "win": {
+      "icon": "public/icon_win.png",
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "mac": {
+      "identity": "Vikadata Technology Co., Ltd",
+      "icon": "public/icon_mac.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "shortcutName": "维格表"
+    }
+  }
+}
