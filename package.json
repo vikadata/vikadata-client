@@ -1,6 +1,6 @@
 {
   "name": "vikadata",
-  "version": "1.0.66",
+  "version": "1.0.12",
   "main": "dist/main.js",
   "license": "MIT",
   "devDependencies": {
@@ -15,14 +15,14 @@
     "webpack-node-externals": "^2.5.2"
   },
   "scripts": {
-    "start": "electron dist/main.js",
+    "start": "electron main.js",
     "build": "webpack",
     "dist:prod_mac": "cross-env BUILD_ENV=production yarn run build && electron-builder build --mac",
     "dist:dev_mac": "cross-env BUILD_ENV=development yarn run build &&  electron-builder build --mac",
     "dist:prod_win": "cross-env BUILD_ENV=production yarn run build && electron-builder build --win",
     "dist:dev_win": "cross-env BUILD_ENV=development yarn run build && electron-builder build --win",
-    "dist:prod_m1": "cross-env BUILD_ENV=production yarn run build && electron-builder build --mac --arm64",
-    "dist:dev_m1": "cross-env BUILD_ENV=development yarn run build && electron-builder build --mac --arm64"
+    "dist:prod_m1": "cross-env BUILD_ENV=production yarn run build && electron-builder build --arm64",
+    "dist:dev_m1": "cross-env BUILD_ENV=development yarn run build && electron-builder build --arm64"
   },
   "build": {
     "productName": "vikadata",
@@ -40,8 +40,11 @@
     },
     "publish": [
       {
-        "provider": "generic",
-        "url": "http://192.168.50.117:8080/"
+        "provider": "s3",
+        "region": "cn-northwest-1",
+        "bucket": "vika-client-download",
+        "endpoint": "https://s3.cn-northwest-1.amazonaws.com.cn",
+        "path": "/integration"
       }
     ],
     "win": {
@@ -53,7 +56,13 @@
     },
     "mac": {
       "identity": "Vikadata Technology Co., Ltd",
-      "icon": "public/icon_mac.png"
+      "icon": "public/icon_mac.png",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": "x64"
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
