@@ -1,21 +1,28 @@
-const { webContents, ipcMain } = require('electron');
+const { webContents, ipcMain, dialog } = require('electron');
 const { autoUpdater } = require("electron-updater");
-const { publishUrl } = require('./config/constants');
+const { publishUrl, env } = require('./config/constants');
+let currentEnv = process.env.NODE_ENV;
 let versionInfo = ''
 
 const checkForUpdate = () => {
-  autoUpdater.setFeedURL(publishUrl);
+  autoUpdater.setFeedURL(currentEnv === env.prod ? publishUrl.prod : publishUrl.dev);
 
   // 监听更新错误
   autoUpdater.on('error', message => {
     sendUpdateMessage('err', message);
   });
 
-  // 检查更新时触发
-  autoUpdater.on('checking-for-update', message => {
-    sendUpdateMessage('checking-for-update', message);
+  autoUpdater.on('update-not-available', (ev, info) => {
+    dialog.showMessageBox({
+      message: `未检测到新版本`
+    });
   });
 
+  // 检查更新时触发
+  autoUpdater.on('checking-for-update', message => {
+    console.log('darker', message);
+    sendUpdateMessage('checking-for-update', message);
+  });
   // 下载进度
   autoUpdater.on('download-progress', processObj => {
     sendUpdateMessage('download-progress', processObj);
@@ -23,9 +30,10 @@ const checkForUpdate = () => {
 
   // 更新下载完成
   autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) => {
-    ipcMain.on('updateNow', (e, arg) => {
-      autoUpdater.quitAndInstall();
+    dialog.showMessageBox({
+      message: `检测到新版本${versionInfo.version}，是否立即升级？`
     });
+    autoUpdater.quitAndInstall();
     sendUpdateMessage('isUpdateNow', versionInfo);
   })
 

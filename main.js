@@ -1,6 +1,7 @@
 const { app, shell, BrowserWindow, Menu } = require('electron')
 const { currentEnv } = require('./config/menu')
 const { getUrl } = require('./utils');
+const { checkForUpdate } = require('./auto_updater');
 
 let win = null;
 // 菜单栏配置
@@ -23,13 +24,15 @@ function createWindow() {
   win.loadURL(getUrl(currentEnv), {
     userAgent,
   })
-  // 检查更新
-  // setTimeout(() => checkForUpdate(), 2000)
+  win.webContents.once('dom-ready', () => {
+    // 检查更新
+    checkForUpdate()
+  })
+
 }
 
 
-
-app.whenReady().then(createWindow)
+app.on('ready', createWindow)
 app.setAppUserModelId("维格表")
 
 //当所有窗口都被关闭后退出
@@ -51,3 +54,5 @@ app.on('web-contents-created', (e, webContents) => {
     shell.openExternal(url);
   });
 });
+
+
