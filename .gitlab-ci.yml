@@ -7,8 +7,9 @@ variables:
 # 构建並部署 feature 客户端
 build_feature_client:
   stage: build
+  image: vikadata/dind-aws-node
   only:
-    - feature
+    - feature-autoupdater
   before_script:
     - node -v
     - yarn config set registry https://registry.npm.taobao.org
@@ -17,12 +18,13 @@ build_feature_client:
     - echo "开始构建Mac客户端安装包..."
     - yarn dist:dev_mac
     - echo "开始构建Window客户端安装包..."
-    -yarn dist:dev_win
+    - yarn dist:dev_win
     - echo "Start Upload......"
     - mkdir ~/.aws/ && touch ~/.aws/credentials
     # $AWS_ACCESS_KEY_ID、$AWS_SECRET_ACCESS_KEY 分别在gitlab代码库的变量里
     - printf "[default]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
     - aws s3 cp dist s3://vika-headquarters.vika.cn/integration  --recursive --include "*"
+    - yarn update:vikalist
     - rm -rf dist/*
     - echo "完成部署！~"
 

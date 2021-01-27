@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/Cellar/node/15.0.1/bin/node /usr/local/bin/yarn dist:dev_mac
+  /usr/local/Cellar/node/15.0.1/bin/node /usr/local/bin/yarn start
 
 PATH: 
-  /Users/jingwuluo/.cargo/bin:/usr/local/bin:/Users/jingwuluo/.deno/bin:/Users/jingwuluo/.cargo/bin:/usr/local/bin:/Users/jingwuluo/.deno/bin:/Users/jingwuluo/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/jingwuluo/.cargo/bin:/Users/jingwuluo/.deno/bin:/usr/local/git/bin:/Users/jingwuluo/.cargo/bin:/usr/local/git/bin:/Users/jingwuluo/.cargo/bin:/usr/local/git/bin
+  /Users/jingwuluo/.cargo/bin:/usr/local/bin:/Users/jingwuluo/.deno/bin:/Users/jingwuluo/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/jingwuluo/.cargo/bin:/Users/jingwuluo/.deno/bin:/usr/local/git/bin:/Users/jingwuluo/.cargo/bin:/usr/local/git/bin
 
 Yarn version: 
   1.22.4
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/jingwuluo/Work/datasheet-electron/package.json: Unexpected token } in JSON at position 1671
+  SyntaxError: /Users/jingwuluo/Work/datasheet-electron/package.json: Unexpected token { in JSON at position 2116
       at JSON.parse (<anonymous>)
       at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:1625:59
       at Generator.next (<anonymous>)
@@ -24,7 +24,7 @@ Trace:
 npm manifest: 
   {
     "name": "vikadata",
-    "version": "1.0.10",
+    "version": "1.0.12",
     "main": "dist/main.js",
     "license": "MIT",
     "devDependencies": {
@@ -41,12 +41,12 @@ npm manifest:
     "scripts": {
       "start": "electron main.js",
       "build": "webpack",
-      "dist:prod_mac": "cross-env BUILD_ENV=production yarn run build && electron-builder build --mac",
-      "dist:dev_mac": "cross-env BUILD_ENV=development yarn run build &&  electron-builder build --mac --publish always",
+      "dist:prod_mac": "sh ./scripts/modify_package.sh x64 && ./cross-env BUILD_ENV=production yarn run build && electron-builder build --mac",
+      "dist:dev_mac": "sh ./scripts/modify_package.sh x64 && cross-env BUILD_ENV=development yarn run build &&  electron-builder build --mac",
       "dist:prod_win": "cross-env BUILD_ENV=production yarn run build && electron-builder build --win",
       "dist:dev_win": "cross-env BUILD_ENV=development yarn run build && electron-builder build --win",
-      "dist:prod_m1": "cross-env BUILD_ENV=production yarn run build && electron-builder build --mac --arm64",
-      "dist:dev_m1": "cross-env BUILD_ENV=development yarn run build && electron-builder build --mac --arm64"
+      "dist:prod_m1": "sh ./scripts/modify_package.sh arm64 && cross-env BUILD_ENV=production yarn run build && electron-builder build --arm64",
+      "dist:dev_m1": "ls"
     },
     "build": {
       "productName": "vikadata",
@@ -66,8 +66,9 @@ npm manifest:
         {
           "provider": "s3",
           "region": "cn-northwest-1",
-          "bucket": "https://vika-client-download.s3.cn-northwest-1.amazonaws.com.cn/integration",
-          "endpoint": "https://vika-client-download.s3.cn-northwest-1.amazonaws.com.cn",
+          "bucket": "vika-client-download",
+          "endpoint": "https://s3.cn-northwest-1.amazonaws.com.cn",
+          "path": "/integration"
         }
       ],
       "win": {
@@ -79,7 +80,86 @@ npm manifest:
       },
       "mac": {
         "identity": "Vikadata Technology Co., Ltd",
-        "icon": "public/icon_mac.png"
+        "icon": "public/icon_mac.png",
+        "target": [
+          {
+            "target": "dmg",
+            "arch": "$2"
+          }
+        ]
+      },
+      "nsis": {
+        "oneClick": false,
+        "allowToChangeInstallationDirectory": true,
+        "perMachine": true,
+        "shortcutName": "维格表"
+      }
+    }
+  }{
+    "name": "vikadata",
+    "version": "1.0.12",
+    "main": "dist/main.js",
+    "license": "MIT",
+    "devDependencies": {
+      "cross-env": "^7.0.3",
+      "electron": "^11.0.3",
+      "electron-builder": "^22.9.1",
+      "webpack": "^5.11.1"
+    },
+    "dependencies": {
+      "electron-updater": "^4.3.5",
+      "webpack-cli": "^4.3.1",
+      "webpack-node-externals": "^2.5.2"
+    },
+    "scripts": {
+      "start": "electron main.js",
+      "build": "webpack",
+      "dist:prod_mac": "cross-env BUILD_ENV=production yarn run build && electron-builder build --mac",
+      "dist:dev_mac": "cross-env BUILD_ENV=development yarn run build &&  electron-builder build --mac",
+      "dist:prod_win": "cross-env BUILD_ENV=production yarn run build && electron-builder build --win",
+      "dist:dev_win": "cross-env BUILD_ENV=development yarn run build && electron-builder build --win",
+      "dist:prod_m1": "cross-env BUILD_ENV=production yarn run build && electron-builder build --arm64",
+      "dist:dev_m1": "cross-env BUILD_ENV=development yarn run build && electron-builder build --arm64"
+    },
+    "build": {
+      "productName": "vikadata",
+      "appId": "com.vikadata.www",
+      "copyright": "",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "files": [
+        "node_modules/",
+        "dist/",
+        "package.json",
+        "public/"
+      ],
+      "directories": {
+        "output": "build"
+      },
+      "publish": [
+        {
+          "provider": "s3",
+          "region": "cn-northwest-1",
+          "bucket": "vika-client-download",
+          "endpoint": "https://s3.cn-northwest-1.amazonaws.com.cn",
+          "path": "/integration"
+        }
+      ],
+      "win": {
+        "icon": "public/icon_win.png",
+        "target": [
+          "nsis",
+          "zip"
+        ]
+      },
+      "mac": {
+        "identity": "Vikadata Technology Co., Ltd",
+        "icon": "public/icon_mac.png",
+        "target": [
+          {
+            "target": "dmg",
+            "arch": "$2"
+          }
+        ]
       },
       "nsis": {
         "oneClick": false,
