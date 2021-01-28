@@ -1,3 +1,7 @@
 #! /bin/bash
 
-sed -i "" "s/\"arch\"\:.*\".*\"/\"arch\"\: \"$1\"/" ./package.json
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i "" "s/\"arch\"\:.*\".*\"/\"arch\"\: \"$1\"/" ./package.json
+else
+  sed -i "s/\"arch\"\:.*\".*\"/\"arch\"\: \"$1\"/" ./package.json
+fi
