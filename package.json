@@ -1,6 +1,6 @@
 {
   "name": "vikadata",
-  "version": "1.0.12",
+  "version": "1.0.10",
   "main": "dist/main.js",
   "license": "MIT",
   "devDependencies": {
@@ -19,13 +19,15 @@
     "build": "webpack",
     "arch:x64": "sh ./scripts/modify_package.sh x64",
     "arch:arm64": "sh ./scripts/modify_package.sh arm64",
-    "update:vikalist": "py ./scripts/upload_package.py",
-    "dist:prod_mac": "yarn arch:x64  && ./cross-env BUILD_ENV=production yarn run build && electron-builder build --mac",
-    "dist:dev_mac": "yarn arch:x64 && cross-env BUILD_ENV=development yarn run build &&  electron-builder build --mac",
-    "dist:prod_win": "cross-env BUILD_ENV=production yarn run build && electron-builder build --win",
-    "dist:dev_win": "cross-env BUILD_ENV=development yarn run build && electron-builder build --win",
-    "dist:prod_m1": "yarn arch:arm64 && cross-env BUILD_ENV=production yarn run build && electron-builder build --arm64",
-    "dist:dev_m1": "yarn arch:arm64 && cross-env BUILD_ENV=development yarn run build && electron-builder build --arm64"
+    "update:vikalist": "python3 ./scripts/upload_package.py",
+    "dist:production_mac": "yarn arch:x64  && cross-env BUILD_ENV=production ARCH=mac yarn run build && electron-builder build --mac",
+    "dist:development_mac": "yarn arch:x64 && cross-env BUILD_ENV=development ARCH=mac yarn run build &&  electron-builder build --mac",
+    "dist:production_win": "cross-env BUILD_ENV=production ARCH=win yarn run build && electron-builder build --win",
+    "dist:development_win": "cross-env BUILD_ENV=development ARCH=win yarn run build && electron-builder build --win",
+    "dist:production_m1": "yarn arch:arm64 && cross-env BUILD_ENV=production ARCH=m1 yarn run build && electron-builder build --arm64",
+    "dist:development_m1": "yarn arch:arm64 && cross-env BUILD_ENV=development ARCH=m1 yarn run build && electron-builder build --arm64",
+    "automation:dev": "sh ./scripts/automation.sh development",
+    "automation:prod": "sh ./scripts/automation.sh production"
   },
   "build": {
     "productName": "vikadata",
@@ -63,7 +65,7 @@
       "target": [
         {
           "target": "dmg",
-          "arch": "arm64"
+          "arch": "x64"
         }
       ]
     },

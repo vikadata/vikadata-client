@@ -12,6 +12,7 @@ module.exports = {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: process.env.BUILD_ENV,
+      ARCH: process.env.ARCH,
     })
   ]
 }

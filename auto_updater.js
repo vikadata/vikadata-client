@@ -1,8 +1,15 @@
-const { webContents, ipcMain, dialog } = require('electron');
+const { webContents, dialog } = require('electron');
 const { autoUpdater } = require("electron-updater");
 const { publishUrl, env } = require('./config/constants');
 let currentEnv = process.env.NODE_ENV;
+let arch = process.env.ARCH;
 let versionInfo = ''
+
+const getFeedUrl = () => {
+  let feedUrl = currentEnv === env.prod ? publishUrl.prod : publishUrl.dev;
+  console.log('FeedUrl: ', `${feedUrl}${arch}/`)
+  return `${feedUrl}${arch}/`
+}
 
 const checkForUpdate = () => {
   autoUpdater.setFeedURL(currentEnv === env.prod ? publishUrl.prod : publishUrl.dev);
