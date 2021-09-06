@@ -4,7 +4,7 @@ import os, re, sys
 _, env, arch = sys.argv
 print('arch:', arch)
 
-vika = Vika("uskF4NhDCsL1a0r1NqPcpQF")
+vika = Vika("uskkpOaoA8rVQ5uVuCYMSky")
 # 通过 datasheetId 来指定要从哪张维格表操作数据。
 datasheet = vika.datasheet("dstDmdYrP8aW5lvoon", field_key="name")
 # 获取安装包名称
