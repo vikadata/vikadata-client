@@ -11,6 +11,7 @@ rm -rf build/*
 echo "开始构建Window客户端安装包..."
 yarn dist:$1_win
 mv ./build/latest.yml ./build/latest-win.yml
+
 yarn update:vikalist $1 win
 rm -rf build/*
 # mkdir ~/.aws/ && touch ~/.aws/credentials
@@ -20,8 +21,8 @@ rm -rf build/*
 echo "完成部署！~"
 
 echo "开始构建M1客户端安装包..."
-yarn dist:$1_m1
-mv ./build/latest_mac.yml ./build/latest-m1.yml
+yarn dist:$1_arm
+mv ./build/latest-mac.yml ./build/latest-arm.yml
 echo "Start Upload......"
-yarn update:vikalist $1 m1
+yarn update:vikalist $1 arm
 rm -rf build/*

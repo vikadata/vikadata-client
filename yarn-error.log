@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/Cellar/node/15.0.1/bin/node /usr/local/bin/yarn start
+  /usr/local/Cellar/node/15.0.1/bin/node /usr/local/bin/yarn dist:production_linux
 
 PATH: 
-  /Users/jingwuluo/.cargo/bin:/usr/local/bin:/Users/jingwuluo/.deno/bin:/Users/jingwuluo/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/jingwuluo/.cargo/bin:/Users/jingwuluo/.deno/bin:/usr/local/git/bin:/Users/jingwuluo/.cargo/bin:/usr/local/git/bin
+  /Users/jingwuluo/.cargo/bin:/usr/local/bin:/Users/jingwuluo/.deno/bin:/usr/local/bin:/usr/local/sbin:/Users/jingwuluo/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/jingwuluo/opt/anaconda3/bin:/Users/jingwuluo/opt/anaconda3/condabin:/Users/jingwuluo/.cargo/bin:/Users/jingwuluo/.deno/bin:/usr/local/sbin:/usr/local/git/bin:/Users/jingwuluo/.cargo/bin:/usr/local/git/bin
 
 Yarn version: 
   1.22.4
@@ -14,23 +14,29 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/jingwuluo/Work/datasheet-electron/package.json: Unexpected token { in JSON at position 2116
-      at JSON.parse (<anonymous>)
-      at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:1625:59
+  Invariant Violation: Script must exist
+      at invariant (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:2314:15)
+      at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:62386:11
       at Generator.next (<anonymous>)
       at step (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:310:30)
-      at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:321:13
+      at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:328:14
+      at new Promise (<anonymous>)
+      at new F (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:5301:28)
+      at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:307:12
+      at realRunCommand (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:62471:23)
+      at action.action (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:62532:16)
 
 npm manifest: 
   {
     "name": "vikadata",
-    "version": "1.0.12",
+    "version": "0.1.0",
     "main": "dist/main.js",
     "license": "MIT",
     "devDependencies": {
       "cross-env": "^7.0.3",
       "electron": "^11.0.3",
       "electron-builder": "^22.9.1",
+      "electron-notarize": "^1.0.0",
       "webpack": "^5.11.1"
     },
     "dependencies": {
@@ -41,18 +47,24 @@ npm manifest:
     "scripts": {
       "start": "electron main.js",
       "build": "webpack",
-      "dist:prod_mac": "sh ./scripts/modify_package.sh x64 && ./cross-env BUILD_ENV=production yarn run build && electron-builder build --mac",
-      "dist:dev_mac": "sh ./scripts/modify_package.sh x64 && cross-env BUILD_ENV=development yarn run build &&  electron-builder build --mac",
-      "dist:prod_win": "cross-env BUILD_ENV=production yarn run build && electron-builder build --win",
-      "dist:dev_win": "cross-env BUILD_ENV=development yarn run build && electron-builder build --win",
-      "dist:prod_m1": "sh ./scripts/modify_package.sh arm64 && cross-env BUILD_ENV=production yarn run build && electron-builder build --arm64",
-      "dist:dev_m1": "ls"
+      "arch:x64": "sh ./scripts/modify_package.sh x64",
+      "arch:arm64": "sh ./scripts/modify_package.sh arm64",
+      "update:vikalist": "python3 ./scripts/upload_package.py",
+      "dist:production_mac": "yarn arch:x64  && cross-env BUILD_ENV=production ARCH=mac yarn run build && electron-builder build --mac",
+      "dist:development_mac": "yarn arch:x64 && cross-env BUILD_ENV=development ARCH=mac yarn run build &&  electron-builder build --mac",
+      "dist:production_win": "cross-env BUILD_ENV=production ARCH=win yarn run build && electron-builder build --win",
+      "dist:development_win": "cross-env BUILD_ENV=development ARCH=win yarn run build && electron-builder build --win",
+      "dist:production_arm": "yarn arch:arm64 && cross-env BUILD_ENV=production ARCH=arm yarn run build && electron-builder build --arm64",
+      "dist:production_linux": "",
+      "dist:development_arm": "yarn arch:arm64 && cross-env BUILD_ENV=development ARCH=arm yarn run build && electron-builder build --arm64",
+      "automation:dev": "sh ./scripts/automation.sh development",
+      "automation:prod": "sh ./scripts/automation.sh production"
     },
     "build": {
       "productName": "vikadata",
-      "appId": "com.vikadata.www",
+      "appId": "com.vika.vikadata",
       "copyright": "",
-      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "artifactName": "${productName}-${version}-arm.${ext}",
       "files": [
         "node_modules/",
         "dist/",
@@ -84,81 +96,18 @@ npm manifest:
         "target": [
           {
             "target": "dmg",
-            "arch": "$2"
-          }
-        ]
-      },
-      "nsis": {
-        "oneClick": false,
-        "allowToChangeInstallationDirectory": true,
-        "perMachine": true,
-        "shortcutName": "维格表"
-      }
-    }
-  }{
-    "name": "vikadata",
-    "version": "1.0.12",
-    "main": "dist/main.js",
-    "license": "MIT",
-    "devDependencies": {
-      "cross-env": "^7.0.3",
-      "electron": "^11.0.3",
-      "electron-builder": "^22.9.1",
-      "webpack": "^5.11.1"
-    },
-    "dependencies": {
-      "electron-updater": "^4.3.5",
-      "webpack-cli": "^4.3.1",
-      "webpack-node-externals": "^2.5.2"
-    },
-    "scripts": {
-      "start": "electron main.js",
-      "build": "webpack",
-      "dist:prod_mac": "cross-env BUILD_ENV=production yarn run build && electron-builder build --mac",
-      "dist:dev_mac": "cross-env BUILD_ENV=development yarn run build &&  electron-builder build --mac",
-      "dist:prod_win": "cross-env BUILD_ENV=production yarn run build && electron-builder build --win",
-      "dist:dev_win": "cross-env BUILD_ENV=development yarn run build && electron-builder build --win",
-      "dist:prod_m1": "cross-env BUILD_ENV=production yarn run build && electron-builder build --arm64",
-      "dist:dev_m1": "cross-env BUILD_ENV=development yarn run build && electron-builder build --arm64"
-    },
-    "build": {
-      "productName": "vikadata",
-      "appId": "com.vikadata.www",
-      "copyright": "",
-      "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "files": [
-        "node_modules/",
-        "dist/",
-        "package.json",
-        "public/"
-      ],
-      "directories": {
-        "output": "build"
-      },
-      "publish": [
-        {
-          "provider": "s3",
-          "region": "cn-northwest-1",
-          "bucket": "vika-client-download",
-          "endpoint": "https://s3.cn-northwest-1.amazonaws.com.cn",
-          "path": "/integration"
-        }
-      ],
-      "win": {
-        "icon": "public/icon_win.png",
-        "target": [
-          "nsis",
-          "zip"
-        ]
-      },
-      "mac": {
-        "identity": "Vikadata Technology Co., Ltd",
-        "icon": "public/icon_mac.png",
-        "target": [
+            "arch": "arm64"
+          },
           {
-            "target": "dmg",
-            "arch": "$2"
+            "target": "zip",
+            "arch": "arm64"
           }
+        ]
+      },
+      "linux": {
+        "target": [
+          "AppImage",
+          "deb"
         ]
       },
       "nsis": {
@@ -954,6 +903,14 @@ Lockfile:
       sanitize-filename "^1.6.3"
       update-notifier "^4.1.1"
       yargs "^16.0.3"
+  
+  electron-notarize@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.npm.taobao.org/electron-notarize/download/electron-notarize-1.0.0.tgz#bc925b1ccc3f79e58e029e8c4706572b01a9fd8f"
+    integrity sha1-vJJbHMw/eeWOAp6MRwZXKwGp/Y8=
+    dependencies:
+      debug "^4.1.1"
+      fs-extra "^9.0.1"
   
   electron-publish@22.9.1:
     version "22.9.1"

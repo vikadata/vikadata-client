@@ -1,7 +1,7 @@
 #! /bin/bash
 
 if [ "$1" == "arm64" ]; then
-  name="\${productName}-\${version}-m1.\${ext}"
+  name="\${productName}-\${version}-arm.\${ext}"
 else
   name="\${productName}-\${version}-\${arch}.\${ext}"
 fi

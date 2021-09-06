@@ -1,12 +1,13 @@
 {
   "name": "vikadata",
-  "version": "1.0.10",
+  "version": "0.1.0",
   "main": "dist/main.js",
   "license": "MIT",
   "devDependencies": {
     "cross-env": "^7.0.3",
     "electron": "^11.0.3",
     "electron-builder": "^22.9.1",
+    "electron-notarize": "^1.0.0",
     "webpack": "^5.11.1"
   },
   "dependencies": {
@@ -24,16 +25,17 @@
     "dist:development_mac": "yarn arch:x64 && cross-env BUILD_ENV=development ARCH=mac yarn run build &&  electron-builder build --mac",
     "dist:production_win": "cross-env BUILD_ENV=production ARCH=win yarn run build && electron-builder build --win",
     "dist:development_win": "cross-env BUILD_ENV=development ARCH=win yarn run build && electron-builder build --win",
-    "dist:production_m1": "yarn arch:arm64 && cross-env BUILD_ENV=production ARCH=m1 yarn run build && electron-builder build --arm64",
-    "dist:development_m1": "yarn arch:arm64 && cross-env BUILD_ENV=development ARCH=m1 yarn run build && electron-builder build --arm64",
+    "dist:production_arm": "yarn arch:arm64 && cross-env BUILD_ENV=production ARCH=arm yarn run build && electron-builder build --arm64",
+    "dist:production_linux": "cross-env BUILD_ENV=production ARCH=linux yarn run build && electron-builder build --linux",
+    "dist:development_arm": "yarn arch:arm64 && cross-env BUILD_ENV=development ARCH=arm yarn run build && electron-builder build --arm64",
     "automation:dev": "sh ./scripts/automation.sh development",
     "automation:prod": "sh ./scripts/automation.sh production"
   },
   "build": {
     "productName": "vikadata",
-    "appId": "com.vikadata.www",
+    "appId": "com.vika.vikadata",
     "copyright": "",
-    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "artifactName": "${productName}-${version}-arm.${ext}",
     "files": [
       "node_modules/",
       "dist/",
@@ -65,8 +67,18 @@
       "target": [
         {
           "target": "dmg",
-          "arch": "x64"
+          "arch": "arm64"
+        },
+        {
+          "target": "zip",
+          "arch": "arm64"
         }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
       ]
     },
     "nsis": {

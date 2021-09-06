@@ -7,6 +7,6 @@ module.exports.getUrl = (currentEnv) => {
     case env.dev:
       return 'https://integration.vika.ltd/';
     default:
-      return 'http://localhost:3000/'
+      return 'http://staging.vika.ltd/'
   }
 }

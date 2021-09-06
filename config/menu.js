@@ -5,7 +5,7 @@ const { app, shell, webContents, Menu } = require('electron')
 const { env } = require('./constants');
 const { getUrl } = require('../utils');
 const { checkForUpdate } = require('../auto_updater');
-let currentEnv = process.env.NODE_ENV;
+let currentEnv = 'localhost' || process.env.NODE_ENV;
 
 function toggleEnv(env) {
   currentEnv = env;
@@ -18,7 +18,7 @@ const menuConfig = [{
   label: app.name,
   submenu: [
     { role: 'about', label: '关于维格表' },
-    { label: '检查更新', click: () => checkForUpdate() },
+    { label: '检查更新', click: () => checkForUpdate(true) },
     { type: 'separator' },
     { role: 'quit', label: '退出维格表' }
   ]
