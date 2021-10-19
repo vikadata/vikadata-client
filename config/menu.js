@@ -5,7 +5,7 @@ const { app, shell, webContents, Menu } = require('electron')
 const { env } = require('./constants');
 const { getUrl } = require('../utils');
 const { checkForUpdate } = require('../auto_updater');
-let currentEnv = 'localhost' || process.env.NODE_ENV;
+let currentEnv = process.env.NODE_ENV;
 
 function toggleEnv(env) {
   currentEnv = env;
