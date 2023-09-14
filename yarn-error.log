@@ -1,35 +1,28 @@
 Arguments: 
-  /usr/local/Cellar/node/15.0.1/bin/node /usr/local/bin/yarn dist:production_linux
+  /Users/kailang/.nvm/versions/node/v16.15.0/bin/node /Users/kailang/.yarn/bin/yarn.js
 
 PATH: 
-  /Users/jingwuluo/.cargo/bin:/usr/local/bin:/Users/jingwuluo/.deno/bin:/usr/local/bin:/usr/local/sbin:/Users/jingwuluo/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/jingwuluo/opt/anaconda3/bin:/Users/jingwuluo/opt/anaconda3/condabin:/Users/jingwuluo/.cargo/bin:/Users/jingwuluo/.deno/bin:/usr/local/sbin:/usr/local/git/bin:/Users/jingwuluo/.cargo/bin:/usr/local/git/bin
+  /Users/kailang/Library/pnpm:/opt/homebrew/opt/jpeg/bin:/Users/kailang/.yarn/bin:/Users/kailang/.config/yarn/global/node_modules/.bin:/Users/kailang/.sdkman/candidates/java/current/bin:/Users/kailang/bin:/Users/kailang/.nvm/versions/node/v16.15.0/bin:/Users/kailang/.autojump/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/go/bin:/usr/local/aria2/bin:/Library/Apple/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/kailang/.cargo/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
 
 Yarn version: 
-  1.22.4
+  1.22.19
 
 Node version: 
-  15.0.1
+  16.15.0
 
 Platform: 
   darwin x64
 
 Trace: 
-  Invariant Violation: Script must exist
-      at invariant (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:2314:15)
-      at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:62386:11
-      at Generator.next (<anonymous>)
-      at step (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:310:30)
-      at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:328:14
-      at new Promise (<anonymous>)
-      at new F (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:5301:28)
-      at /Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:307:12
-      at realRunCommand (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:62471:23)
-      at action.action (/Users/jingwuluo/.config/yarn/global/node_modules/yarn/lib/cli.js:62532:16)
+  Error: https://registry.npm.taobao.org/semver/download/semver-7.3.4.tgz?cache=0&sync_timestamp=1606852064928&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsemver%2Fdownload%2Fsemver-7.3.4.tgz: ETIMEDOUT
+      at Timeout._onTimeout (/Users/kailang/.yarn/lib/cli.js:141550:19)
+      at listOnTimeout (node:internal/timers:559:17)
+      at processTimers (node:internal/timers:502:7)
 
 npm manifest: 
   {
     "name": "vikadata",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "main": "dist/main.js",
     "license": "MIT",
     "devDependencies": {
@@ -55,7 +48,7 @@ npm manifest:
       "dist:production_win": "cross-env BUILD_ENV=production ARCH=win yarn run build && electron-builder build --win",
       "dist:development_win": "cross-env BUILD_ENV=development ARCH=win yarn run build && electron-builder build --win",
       "dist:production_arm": "yarn arch:arm64 && cross-env BUILD_ENV=production ARCH=arm yarn run build && electron-builder build --arm64",
-      "dist:production_linux": "",
+      "dist:production_linux": "cross-env BUILD_ENV=production ARCH=linux yarn run build && electron-builder build --linux",
       "dist:development_arm": "yarn arch:arm64 && cross-env BUILD_ENV=development ARCH=arm yarn run build && electron-builder build --arm64",
       "automation:dev": "sh ./scripts/automation.sh development",
       "automation:prod": "sh ./scripts/automation.sh production"
