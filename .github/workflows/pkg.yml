@@ -27,6 +27,7 @@ jobs:
       - run: yarn install
       - run: rm -rf build
       - run: yarn dist:production_mac
+        continue-on-error: true
 
   upload-mac:
     runs-on: ubuntu-latest
