@@ -15,13 +15,13 @@ jobs:
         with:
           node-version: 16
       - run: npm install -g yarn
-      - run: yarn install
 
   build-mac:
     runs-on: ubuntu-latest
     needs: setup
     steps:
       - uses: actions/checkout@v3
+      - run: yarn install
       - run: rm -rf build
       - run: yarn dist:production_mac
 
