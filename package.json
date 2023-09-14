@@ -45,15 +45,6 @@
     "directories": {
       "output": "build"
     },
-    "publish": [
-      {
-        "provider": "s3",
-        "region": "cn-northwest-1",
-        "bucket": "vika-client-download",
-        "endpoint": "https://s3.cn-northwest-1.amazonaws.com.cn",
-        "path": "/integration"
-      }
-    ],
     "win": {
       "icon": "public/icon_win.png",
       "target": [
