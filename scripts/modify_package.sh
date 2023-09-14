@@ -7,7 +7,7 @@ else
 fi
 
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
+if [ "$OSTYPE" == "darwin"* ]; then
   # 修改架构
   sed -i "" "s/\"arch\"\:.*\".*\"/\"arch\"\: \"$1\"/" ./package.json
   # 修改包名
